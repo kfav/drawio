@@ -20,5 +20,5 @@ jobs:
         run: |
           git checkout dev
           git fetch upstream
-          git merge upstream/dev
+          git merge --allow-unrelated-histories upstream/dev
           git push origin dev  
