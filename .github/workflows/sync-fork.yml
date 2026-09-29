@@ -19,5 +19,6 @@ jobs:
       - name: Fetch and Merge
         run: |
           git checkout dev
+          git fetch upstream
           git merge upstream/dev
           git push origin dev  
