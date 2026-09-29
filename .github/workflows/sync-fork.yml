@@ -14,7 +14,7 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       
       - name: Add Upstream
-        run: git remote add upstream https://github.com/original-owner/original-repo.git
+        run: git remote add upstream https://github.com/jgraph/drawio.git
       
       - name: Fetch and Merge
         run: |
