@@ -152,7 +152,7 @@ Actions.prototype.init = function()
 		
 		try
 		{
-			cells = ui.copyXml();
+			cells = ui.copyXml(true);
 
 			if (cells != null)
 			{
@@ -236,7 +236,7 @@ Actions.prototype.init = function()
 	{
 		if (graph.isEnabled() && !graph.isSelectionEmpty() && ui.copiedSize != null)
 		{
-			graph.getModel().beginUpdate();
+			var arrange = graph.beginArrange();
 			
 			try
 			{
@@ -261,7 +261,7 @@ Actions.prototype.init = function()
 			}
 			finally
 			{
-				graph.getModel().endUpdate();
+				graph.endArrange(arrange);
 			}
 		}
 	}, null, null,  Editor.altKey + '+' + Editor.shiftKey + '+V');
@@ -818,25 +818,28 @@ Actions.prototype.init = function()
 		
 		if (graph.isEnabled() && cells.length > 0)
 		{
-			// Prefills only what the whole selection agrees on — showing
-			// the first cell's link would look like it was shared by all
-			// of them, and pressing OK would then silently spread it.
+			// Prefills only what the whole selection agrees on. Values that
+			// differ are shown as mixed and kept per cell unless the user
+			// changes them: prefilling the first cell's value would spread
+			// it on OK, and an empty field would remove all of them.
 			var value = graph.getLinkForCell(cells[0], true) || '';
 			var target = graph.getLinkTargetForCell(cells[0]);
+			var mixed = {link: false, linkTarget: false};
 
 			for (var i = 1; i < cells.length; i++)
 			{
-				if ((graph.getLinkForCell(cells[i], true) || '') != value)
-				{
-					value = '';
-					target = null;
-					break;
-				}
+				mixed.link = mixed.link ||
+					(graph.getLinkForCell(cells[i], true) || '') != value;
+				mixed.linkTarget = mixed.linkTarget ||
+					graph.getLinkTargetForCell(cells[i]) != target;
 			}
 			
-			ui.showLinkDialog(value, mxResources.get('ok'), function(link, docs, linkTarget)
+			ui.showLinkDialog((mixed.link) ? '' : value, mxResources.get('ok'),
+				function(link, docs, linkTarget, unchanged)
 			{
 				var newLink = (link.length > 0) ? link : null;
+				var keepLink = unchanged != null && unchanged.link;
+				var keepTarget = unchanged != null && unchanged.linkTarget;
 
 				graph.getModel().beginUpdate();
 				try
@@ -846,14 +849,14 @@ Actions.prototype.init = function()
 						// Skips cells that have neither value: writing
 						// null through setAttributeForCell would turn a
 						// plain label into a UserObject for nothing.
-						if (newLink != null ||
-							graph.getLinkForCell(cells[i], true) != null)
+						if (!keepLink && (newLink != null ||
+							graph.getLinkForCell(cells[i], true) != null))
 						{
 							graph.setLinkForCell(cells[i], newLink);
 						}
 
-						if (linkTarget != null ||
-							graph.getLinkTargetForCell(cells[i]) != null)
+						if (!keepTarget && (linkTarget != null ||
+							graph.getLinkTargetForCell(cells[i]) != null))
 						{
 							graph.setAttributeForCell(cells[i],
 								'linkTarget', linkTarget);
@@ -864,7 +867,7 @@ Actions.prototype.init = function()
 				{
 					graph.getModel().endUpdate();
 				}
-			}, true, target);
+			}, true, (mixed.linkTarget) ? null : target, mixed);
 		}
 	}, null, null,  Editor.altKey + '+' + Editor.shiftKey + '+L');
 	this.put('insertImage', new Action('image' + '...', function()
@@ -944,6 +947,7 @@ Actions.prototype.init = function()
 				var elt = graph.getSelectedElement();
 				var link = graph.getParentByName(elt, 'A', graph.cellEditor.textarea);
 				var oldValue = '';
+				var oldTarget = null;
 				
 				// Workaround for FF returning the outermost selected element after double
 				// click on a DOM hierarchy with a link inside (but not as topmost element)
@@ -965,20 +969,21 @@ Actions.prototype.init = function()
 				if (link != null && link.nodeName == 'A')
 				{
 					oldValue = link.getAttribute('href') || '';
+					oldTarget = (link.getAttribute('target') == '_blank') ? '_blank' : null;
 					graph.selectNode(link);
 				}
 				
 				var selState = graph.cellEditor.saveSelection();
 				
-				ui.showLinkDialog(oldValue, mxResources.get('ok'), mxUtils.bind(this, function(value)
+				ui.showLinkDialog(oldValue, mxResources.get('ok'), mxUtils.bind(this, function(value, docs, linkTarget)
 				{
 		    		graph.cellEditor.restoreSelection(selState);
 
 		    		if (value != null)
 		    		{
-		    			graph.insertLink(value);
+		    			graph.insertLink(value, linkTarget);
 					}
-				}));
+				}), true, oldTarget);
 			}
 			else if (graph.isSelectionEmpty())
 			{
@@ -993,30 +998,70 @@ Actions.prototype.init = function()
 	this.addAction('autosize', function()
 	{
 		var cells = graph.getSelectionCells();
-		
+		var model = graph.getModel();
+
+		// Keeps the groupPadding style as the per-side gap
+		// between the group bounds and its children
+		function updateGroupBounds(cell)
+		{
+			var pad = graph.getTransparentBoundsPadding(cell);
+			graph.updateGroupBounds([cell], 0, true,
+				pad.n, pad.e, pad.s, pad.w);
+		};
+
+		// Shrinks nested containers bottom-up before their parent. Leaves keep
+		// their size and containers whose bounds are not defined by their
+		// children (tables, collapsed cells and child layouts) are skipped.
+		// The bounds of transparentBounds cells are derived from their
+		// children so only their descendants are updated.
+		function updateNestedGroupBounds(parent)
+		{
+			var childCount = model.getChildCount(parent);
+
+			for (var i = 0; i < childCount; i++)
+			{
+				var child = model.getChildAt(parent, i);
+
+				if (model.isVertex(child) && model.getChildCount(child) > 0 &&
+					!graph.isCellCollapsed(child) && !graph.isTable(child) &&
+					!graph.isTableRow(child) && !graph.isTableCell(child) &&
+					graph.getCurrentCellStyle(child)['childLayout'] == null)
+				{
+					updateNestedGroupBounds(child);
+
+					if (!graph.isTransparentBounds(child))
+					{
+						updateGroupBounds(child);
+					}
+				}
+			}
+		};
+
 		if (cells != null)
 		{
-			graph.getModel().beginUpdate();
+			var arrange = graph.beginArrange();
 			try
 			{
 				for (var i = 0; i < cells.length; i++)
 				{
 					var cell = cells[i];
 
-					if (graph.getModel().isVertex(cell))
+					if (model.isVertex(cell))
 					{
 						if (graph.isAutosizeTextCell(cell))
 						{
 							graph.setCellStyles('autosizeText', null, [cell]);
 						}
 
-						if (graph.getModel().getChildCount(cell) > 0)
+						if (model.getChildCount(cell) > 0)
 						{
-							// Keeps the groupPadding style as the per-side gap
-							// between the group bounds and its children
-							var pad = graph.getTransparentBoundsPadding(cell);
-							graph.updateGroupBounds([cell], 0, true,
-								pad.n, pad.e, pad.s, pad.w);
+							if (!graph.isCellCollapsed(cell) && !graph.isTable(cell) &&
+								graph.getCurrentCellStyle(cell)['childLayout'] == null)
+							{
+								updateNestedGroupBounds(cell);
+							}
+
+							updateGroupBounds(cell);
 						}
 						else
 						{
@@ -1027,7 +1072,7 @@ Actions.prototype.init = function()
 			}
 			finally
 			{
-				graph.getModel().endUpdate();
+				graph.endArrange(arrange);
 			}
 		}
 	}, null, null, Editor.ctrlKey + '+' + Editor.shiftKey + '+Y');
@@ -1124,6 +1169,11 @@ Actions.prototype.init = function()
 					{
 						graph.setCellRotation(cells[i], newValue);
 					}
+
+					// Same event as the rotation in the format panel
+					ui.fireEvent(new mxEventObject('styleChanged', 'keys',
+						[mxConstants.STYLE_ROTATION], 'values', [newValue],
+						'cells', cells));
 				}
 				finally
 				{
@@ -1590,6 +1640,11 @@ Actions.prototype.init = function()
 	    		
 				graph.setCellStyles(mxConstants.STYLE_ROUNDED, value);
 				graph.setCellStyles(mxConstants.STYLE_CURVED, null);
+				graph.setCellStyles('roundedPerimeter', (value == '1') ? '1' : null,
+					graph.getModel().filterCells(cells, function(cell)
+					{
+						return graph.getModel().isVertex(cell);
+					}));
 				ui.fireEvent(new mxEventObject('styleChanged', 'keys', [mxConstants.STYLE_ROUNDED, mxConstants.STYLE_CURVED],
 						'values', [value, '0'], 'cells', graph.getSelectionCells()));
 			}
@@ -1641,7 +1696,18 @@ Actions.prototype.init = function()
 			{
 	    		if (newValue != null)
 				{
-					graph.setCellStyle(mxUtils.trim(newValue), cells);
+					// Reports the new styles like an arrange action (see
+					// Graph.beginArrange), eg. a new rotation moves the
+					// connection points of the shape
+					var arrange = graph.beginArrange();
+					try
+					{
+						graph.setCellStyle(mxUtils.trim(newValue), cells);
+					}
+					finally
+					{
+						graph.endArrange(arrange);
+					}
 				}
 			}, null, null, 400, 220);
 			this.editorUi.showDialog(dlg.container, 420, 300, true, true, null, null, null,
@@ -1663,6 +1729,25 @@ Actions.prototype.init = function()
 			ui.clearDefaultStyle();
 		}
 	}, null, null, Editor.ctrlKey + '+' + Editor.shiftKey + '+R');
+	this.addAction('setAsDefaultForNewConnections', function()
+	{
+		var cell = graph.getSelectionCell();
+
+		if (graph.isEnabled() && graph.getSelectionCount() == 1 &&
+			graph.getNewEdgeStyleSource(cell) != null)
+		{
+			graph.setNewEdgeStyleFromEdge(cell);
+		}
+	});
+	this.addAction('clearDefaultForNewConnections', function()
+	{
+		var cells = graph.getEditableCells(graph.getSelectionCells());
+
+		if (graph.isEnabled() && cells.length > 0)
+		{
+			graph.setCellStyles('newEdgeStyle', null, cells);
+		}
+	});
 	this.addAction('addWaypoint', function()
 	{
 		var cell = graph.getSelectionCell();
@@ -1692,6 +1777,22 @@ Actions.prototype.init = function()
 				var x = Math.round(graph.snap(pt.x - dx));
 				var y = Math.round(graph.snap(pt.y - dy));
 				handler.addPointAt(handler.state, x, y);
+			}
+		}
+	});
+	this.addAction('addConnectionPoint', function()
+	{
+		var cell = graph.getSelectionCell();
+
+		if (cell != null && graph.isEnabled() && !graph.isCellLocked(cell))
+		{
+			var pt = graph.popupMenuHandler.getTriggerPoint();
+			var constraint = graph.getConnectionConstraintForPoint(
+				graph.view.getState(cell), pt.x, pt.y);
+
+			if (constraint != null)
+			{
+				graph.addConnectionConstraint(cell, constraint);
 			}
 		}
 	});
@@ -1790,26 +1891,45 @@ Actions.prototype.init = function()
 			document.execCommand('superscript', false, null);
 		}
 	}), null, null, Editor.ctrlKey + '+.');
-	action = this.addAction('decreaseFontSize', mxUtils.bind(this, function()
+
+	// Steps the font size of each selected cell and of the parts of its label
+	function stepFontSize(delta)
 	{
 		if (!graph.isSelectionEmpty())
 		{
-			var style = graph.getCurrentCellStyle(graph.getSelectionCell());
-			var size = mxUtils.getValue(style, mxConstants.STYLE_FONTSIZE, mxConstants.DEFAULT_FONTSIZE);
-			graph.setCellStyles(mxConstants.STYLE_FONTSIZE, Math.max(1, size - 1),
-				graph.getSelectionCells());
+			var arrange = graph.beginArrange();
+			try
+			{
+				var cells = graph.getEditableCells(graph.getSelectionCells());
+
+				graph.changeFontSize(cells, function(size)
+				{
+					return Math.min(999, Math.max(1, size + delta));
+				});
+
+				for (var i = 0; i < cells.length; i++)
+				{
+					if (graph.model.getChildCount(cells[i]) == 0)
+					{
+						graph.autoSizeCell(cells[i], false);
+					}
+				}
+			}
+			finally
+			{
+				graph.endArrange(arrange);
+			}
 		}
-	}), null, null, Editor.ctrlKey + '+' + Editor.shiftKey + ' + (Numpad)');
-	action = this.addAction('increaseFontSize', mxUtils.bind(this, function()
+	};
+
+	action = this.addAction('decreaseFontSize', function()
 	{
-		if (!graph.isSelectionEmpty())
-		{
-			var style = graph.getCurrentCellStyle(graph.getSelectionCell());
-			var size = mxUtils.getValue(style, mxConstants.STYLE_FONTSIZE, mxConstants.DEFAULT_FONTSIZE);
-			graph.setCellStyles(mxConstants.STYLE_FONTSIZE, Math.min(100, size + 1),
-				graph.getSelectionCells());
-		}
-	}), null, null, Editor.ctrlKey + '+' + Editor.shiftKey + ' - (Numpad)');
+		stepFontSize(-1);
+	}, null, null, Editor.ctrlKey + '+' + Editor.shiftKey + ' - (Numpad)');
+	action = this.addAction('increaseFontSize', function()
+	{
+		stepFontSize(1);
+	}, null, null, Editor.ctrlKey + '+' + Editor.shiftKey + ' + (Numpad)');
 
 	function applyClipPath(cell, clipPath, width, height, graph)
 	{
@@ -2077,43 +2197,6 @@ Actions.prototype.init = function()
 
 	action.setToggleAction(true);
 	action.setSelectedCallback(mxUtils.bind(this, function() { return this.outlineWindow != null && this.outlineWindow.window.isVisible(); }));
-
-	this.addAction('editPolygon...', function()
-	{
-		var cell = graph.getSelectionCell();
-
-		if (graph.isEnabled() && cell != null)
-		{
-			var state = graph.view.getState(cell);
-
-			if (state != null && mxUtils.getValue(state.style,
-				mxConstants.STYLE_SHAPE) === 'mxgraph.basic.polygon')
-			{
-				var dlg = new PolygonDialog(ui, cell);
-				ui.showDialog(dlg.container, 680, 540, true, true,
-					function() { dlg.destroy(); },
-					null, null, new mxRectangle(0, 0, 740, 600));
-				dlg.init();
-			}
-		}
-	}).isEnabled = isGraphEnabled;
-
-	this.addAction('editConnectionPoints...', function()
-	{
-		var cell = graph.getSelectionCell();
-
-		if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()) &&
-			cell != null && cell.geometry != null)
-		{
-			var dlg = new ConnectionPointsDialog(ui, cell);
-	    	ui.showDialog(dlg.container, 400, 450, true, false, function()
-			{
-				dlg.destroy();
-			}, null, null, new mxRectangle(0, 0, 400 + 50, 450 + 50),
-				null, 'editConnectionPoints');
-			dlg.init();
-		}
-	}, null, null,  Editor.altKey + '+' + Editor.shiftKey + '+Q').isEnabled = isGraphEnabled;
 };
 
 /**

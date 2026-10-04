@@ -194,6 +194,8 @@ mxscript(drawDevUrl + 'js/diagramly/util/mxAsyncCanvas.js');
 
 mxscript(drawDevUrl + 'js/diagramly/gif/GifEncoder.js');
 mxscript(drawDevUrl + 'js/diagramly/gif/AnimatedExport.js');
+mxscript(drawDevUrl + 'js/diagramly/gif/Mp4Encoder.js');
+mxscript(drawDevUrl + 'js/diagramly/gif/AnimationExport.js');
 
 mxscript(drawDevUrl + 'js/diagramly/DrawioFile.js');
 mxscript(drawDevUrl + 'js/diagramly/LocalFile.js');
@@ -223,6 +225,7 @@ mxscript(drawDevUrl + 'js/diagramly/UrlLibrary.js');
 mxscript(drawDevUrl + 'js/diagramly/DriveFile.js');
 mxscript(drawDevUrl + 'js/diagramly/DriveLibrary.js');
 mxscript(drawDevUrl + 'js/diagramly/DriveClient.js');
+mxscript(drawDevUrl + 'js/diagramly/HomeDialog.js');
 mxscript(drawDevUrl + 'js/diagramly/DropboxFile.js');
 mxscript(drawDevUrl + 'js/diagramly/DropboxLibrary.js');
 mxscript(drawDevUrl + 'js/diagramly/DropboxClient.js');
@@ -254,6 +257,11 @@ if (!window.DRAWIO_PUBLIC_BUILD)
 {
 	mxscript(drawDevUrl + 'js/diagramly/Simple.js');
 	mxscript(drawDevUrl + 'js/diagramly/vsdx/VsdxExport.js');
+}
+else
+{
+	// The public repository ships the stencil bundle without the stencil XML
+	mxscript(drawDevUrl + 'js/stencils.min.js');
 }
 
 // ELK layout engine + mxGraph bridge (drawio-elk port, built from
@@ -296,6 +304,11 @@ mxscript(drawDevUrl + 'js/diagramly/vsdx/mxVsdxCanvas2D.js');
 mxscript(drawDevUrl + 'js/diagramly/vsdx/bmpDecoder.js');
 mxscript(drawDevUrl + 'js/diagramly/vsdx/importer.js');
 mxscript(drawDevUrl + 'js/jszip/jszip.min.js');
+
+// Binary Visio (.vsd/.vss/.vst) to Visio XML converter (drawio-vsd port,
+// built from ../drawio-vsd). Exposes window.DrawioVsd; importVisio converts
+// binary files in the browser before the VSDX importer reads them.
+mxscript(drawDevUrl + 'js/vsd/drawio-vsd.min.js');
 
 // GraphMl Import
 mxscript(drawDevUrl + 'js/diagramly/graphml/mxGraphMlCodec.js');

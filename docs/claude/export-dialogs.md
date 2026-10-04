@@ -14,7 +14,16 @@ size/exportType from the selection) store the override ONLY while it differs
 from the derived default computed at dialog-open and reset to null when the
 confirmed value matches it again — untouched settings keep tracking page/theme
 changes, and re-picking the derived value resumes tracking (no reset UI
-needed).
+needed). The print dialog's border follows the same pattern
+([jgraph/drawio#5682]): it defaults to 0 for PDF export (`fn != null`) and
+to `mxPrintPreview.prototype.pageMargin` (27) for printing, and the shared
+`lastPrintBorder` is only kept while it differs from that default.
+
+The animation export dialog adds `lastExportAnimationSource` (page/flow,
+saved only when the page has a step animation) and
+`lastExportAnimationFormat` (GIF/MP4, saved only for page animations when
+MP4 is available); without a stored format an animation longer than the GIF
+limit preselects MP4.
 
 Saves are gated on the control being applicable (visible/enabled for the
 format): an unconditional save from a dialog where the control is hidden
@@ -25,3 +34,18 @@ a custom DPI needs the custom input toggled visible).
 
 Dialog look & feel (CustomDialog, CSS classes, spacing, dark mode):
 `docs/dialog-style-guide.md`.
+
+## Named presets (image export dialog)
+
+(Oct 2026, jgraph/drawio-desktop#2339) `showExportDialog` (PNG/SVG/JPEG/WEBP)
+has a Presets select as the first row: "Save as..." stores the values of the
+APPLICABLE controls under a name (`FilenameDialog`), picking a preset applies
+them, "Delete" removes the selected one. Presets persist per format in
+`mxSettings.settings.exportPresets` (`{png: [{name, values}], ...}`, accessors
+`mxSettings.get/setExportPresets`).
+Stored entries are untrusted: `EditorUi.sanitizeExportPreset` copies only
+known keys with the expected type into an `Object.create(null)` object,
+clamps numbers and validates enums; names are trimmed, capped and only
+written via `mxUtils.write`. Applying a preset does not change the
+per-session `lastExport*` memory until the export is confirmed. The print/PDF
+dialog has no presets.

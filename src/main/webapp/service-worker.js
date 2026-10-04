@@ -24,28 +24,27 @@
 self.skipWaiting();
 
 var MANIFEST = [
-  {"url":"js/bootstrap.js","revision":"7b157ab8563095796b0a2e940d9d5b88"},
+  {"url":"js/bootstrap.js","revision":"d8ff725e43b7b0f27feb01a2b2242226"},
   {"url":"js/main.js","revision":"a8d40469d3d72ab4b11059362f3dd825"},
-  {"url":"js/app.min.js","revision":"d447b0d7e749efbb734a4e8458857ab3"},
-  {"url":"js/extensions.min.js","revision":"d67abef095b2436ee63f42e51c698c87"},
-  {"url":"js/plantuml/drawio-plantuml.min.js","revision":"ca23778ca3fb4c78dd88d03cd62fad16"},
+  {"url":"js/extensions.min.js","revision":"aa2f5b1a7cb52c5b08df4fa96106053f"},
+  {"url":"js/plantuml/drawio-plantuml.min.js","revision":"2bb5c7783a7662f8e939d7a5437d5f5d"},
   {"url":"js/orgchart.min.js","revision":"619d8c4dab47b81868916df31f55478b"},
-  {"url":"js/stencils.min.js","revision":"8350bc2dfb9cce00ad8c5cb4137ea3af"},
-  {"url":"js/shapes-14-6-5.min.js","revision":"2dd5884f665e3a61f789d75eab51fd21"},
-  {"url":"js/math-print.js","revision":"3756aa0f6df77abbba56465a1544fe1e"},
-  {"url":"index.html","revision":"9de11c65ec13b24c73ace7042bc529cc-31.5.3"},
-  {"url":"open.html","revision":"d71816b3b00e769fc6019fcdd6921662-31.5.3"},
+  {"url":"js/stencils.min.js","revision":"ed29a54cd418b1888595b2d10c53a1b5"},
+  {"url":"js/shapes-14-6-5.min.js","revision":"e3bdb9e5d79ea32d5a91f5bba73812b5"},
+  {"url":"js/math-print.js","revision":"6e1ff765ea66d2447c04b269cbefbb97"},
+  {"url":"index.html","revision":"9de11c65ec13b24c73ace7042bc529cc-32.0.2"},
+  {"url":"open.html","revision":"d71816b3b00e769fc6019fcdd6921662-32.0.2"},
   {"url":"shortcuts.svg","revision":"e6e8b6ca4cdf380eb5908925fadda599"},
   {"url":"styles/fonts/ArchitectsDaughter-Regular.ttf","revision":"31c2153c0530e32553b31a49b3d70736"},
-  {"url":"styles/grapheditor.css","revision":"ff97a0bbc92821d1d36ea469bc3501f1"},
+  {"url":"styles/grapheditor.css","revision":"0358dfba66eefdc9670c747de3011b7b"},
   {"url":"styles/high-contrast.css","revision":"0c0219b1016c8bd6bbf859cfd53b5058"},
   {"url":"js/dropbox/Dropbox-sdk.min.js","revision":"4b9842892aa37b156db0a8364b7a83b0"},
   {"url":"js/onedrive/OneDrive.js","revision":"e863f5e6833892f22492211663e3efe9"},
-  {"url":"js/viewer-static.min.js","revision":"c9f7c5fc16040288541e379ba8dfa1d0"},
-  {"url":"connect/jira/editor-1-3-3.html","revision":"41dc8af9576b47f359cff19fff7a41c2-31.5.3"},
-  {"url":"connect/jira/viewerPanel-1-3-12.html","revision":"4836f5e4308abe57830e441518364f23-31.5.3"},
-  {"url":"connect/jira/viewerPanel2.html","revision":"0dd1ee1343a46b5c03aedbc587450b84-31.5.3"},
-  {"url":"connect/jira/fullScreenViewer-1-3-3.html","revision":"abed474e47c0c41a5ad2366b4828f77a-31.5.3"},
+  {"url":"js/viewer-static.min.js","revision":"2982a08d531d476ce24c5200c3f9e1ad"},
+  {"url":"connect/jira/editor-1-3-3.html","revision":"41dc8af9576b47f359cff19fff7a41c2-32.0.2"},
+  {"url":"connect/jira/viewerPanel-1-3-12.html","revision":"4836f5e4308abe57830e441518364f23-32.0.2"},
+  {"url":"connect/jira/viewerPanel2.html","revision":"0dd1ee1343a46b5c03aedbc587450b84-32.0.2"},
+  {"url":"connect/jira/fullScreenViewer-1-3-3.html","revision":"abed474e47c0c41a5ad2366b4828f77a-32.0.2"},
   {"url":"connect/jira/viewerPanel.js","revision":"85011efa68d638da560871ee2ab3a6fe"},
   {"url":"connect/jira/spinner.gif","revision":"7d857ab9d86123e93d74d48e958fe743"},
   {"url":"connect/jira/editor.js","revision":"6264f470f244aec4b62035bbad03eb5e"},
@@ -53,58 +52,20 @@ var MANIFEST = [
   {"url":"connect/jira/fullscreen-viewer.js","revision":"a6be96b8ddc5a25196925713cf34d571"},
   {"url":"plugins/connectJira.js","revision":"d220cad2edf0d6b161505fe12ae3eaa6"},
   {"url":"plugins/cConf-comments.js","revision":"faaee24081d7b0fb9af0add3171feaac"},
-  {"url":"plugins/cConf-1-4-8.js","revision":"0a3b205ab0191f4bc50434df1b0d1472"},
-  {"url":"connect/confluence/connectUtils-1-4-8.js","revision":"bbeb82e0960c92e105ae3da4d39f8123"},
-  {"url":"connect/new_common/cac.js","revision":"b52c73de9d22b867a036ad50c6bfdca2"},
+  {"url":"plugins/cConf-1-4-8.js","revision":"c38ede4830fecae08feebe164eab6472"},
+  {"url":"connect/confluence/connectUtils-1-4-8.js","revision":"cfbf5d0f3ee4a36e7b14de12d98c1d90"},
+  {"url":"connect/new_common/cac.js","revision":"cb67d9063901b90c656da15548ca80af"},
   {"url":"connect/gdrive_common/gac.js","revision":"c66fdc50ec87002a502cb0779b73a692"},
   {"url":"connect/onedrive_common/ac.js","revision":"1264ba8705eff0d1337701e5ae962366"},
   {"url":"connect/confluence/viewer-init.js","revision":"c5e51e32ac74414d8d518af83ee2781f"},
   {"url":"connect/confluence/viewer.js","revision":"092c424361f3c34559cafeafd64407a6"},
-  {"url":"connect/confluence/viewer-1-4-42.html","revision":"69c1bca25fd4889bf832e8441c972268-31.5.3"},
-  {"url":"connect/confluence/macroEditor-1-4-8.html","revision":"4ad77ae3f08c19eddac932b2fa8c7068-31.5.3"},
+  {"url":"connect/confluence/viewer-1-4-42.html","revision":"69c1bca25fd4889bf832e8441c972268-32.0.2"},
+  {"url":"connect/confluence/macroEditor-1-4-8.html","revision":"4ad77ae3f08c19eddac932b2fa8c7068-32.0.2"},
   {"url":"connect/confluence/includeDiagram-1-4-8.js","revision":"18b947a8b2ee4e52bec702f4712521e5"},
-  {"url":"connect/confluence/includeDiagram.html","revision":"01b04b3f54f1e2e63fcf1df033d24519-31.5.3"},
+  {"url":"connect/confluence/includeDiagram.html","revision":"ea43646d9f24ac0b96171f1ab3fa9f00-32.0.2"},
   {"url":"connect/confluence/macro-editor.js","revision":"b9000d6c20f30e4068f83bd0b56965ca"},
-  {"url":"math4/es5/ui/safe.js","revision":"70818a3a0b12f623d08897c6db834920"},
-  {"url":"math4/es5/core.js","revision":"dc3ca1e12b086e5ab44e588a7cb6ebb3"},
-  {"url":"math4/es5/input/tex/extensions/bbm.js","revision":"37c50bc52184b8c42a7eb1a298f41fc7"},
-  {"url":"math4/es5/input/tex/extensions/html.js","revision":"1dbf459284a356d3dd798b55d50338e5"},
-  {"url":"math4/es5/input/tex/extensions/extpfeil.js","revision":"de942104a37fc29776ca6dd92e058fea"},
-  {"url":"math4/es5/input/tex/extensions/action.js","revision":"14b596f960d5ad23f0261172a0d68442"},
-  {"url":"math4/es5/input/tex/extensions/boldsymbol.js","revision":"6ec450a1a985a675a707dd2bcb3f28b9"},
-  {"url":"math4/es5/input/tex/extensions/cases.js","revision":"a8d24f5780531e41ee7ff886afbe43b6"},
-  {"url":"math4/es5/input/tex/extensions/colortbl.js","revision":"aafd1acee14275da66b92133a8964380"},
-  {"url":"math4/es5/input/tex/extensions/verb.js","revision":"ab72d9a4a1eb7cb362102f116c616267"},
-  {"url":"math4/es5/input/tex/extensions/unicode.js","revision":"f160a925b70b13efc578c26efca11109"},
-  {"url":"math4/es5/input/tex/extensions/cancel.js","revision":"8700913fce2fff59eeee7210d0601277"},
-  {"url":"math4/es5/input/tex/extensions/enclose.js","revision":"8e5480f5e500cbe6f1386c15fca5d19d"},
-  {"url":"math4/es5/input/tex/extensions/units.js","revision":"bcef51b542b655a559a0983f86e97f04"},
-  {"url":"math4/es5/input/tex/extensions/color.js","revision":"e1f5ef972381258c026e9cc353091e59"},
-  {"url":"math4/es5/input/tex/extensions/mathtools.js","revision":"6c151738889bf646095dcdce49b470c8"},
-  {"url":"math4/es5/input/tex/extensions/begingroup.js","revision":"f63f1f305c8bd983cf30a23a987309b2"},
-  {"url":"math4/es5/input/tex/extensions/braket.js","revision":"2cc752907a81288ad6a20a7529c6e444"},
-  {"url":"math4/es5/input/tex/extensions/dsfont.js","revision":"558cff16e8e6b40b17c6c78d04d18f41"},
-  {"url":"math4/es5/input/tex/extensions/bbox.js","revision":"1bd2f431508c18e51de187ca585f4e8c"},
-  {"url":"math4/es5/input/tex/extensions/amscd.js","revision":"2b299b847a50a8fe2fba3fda4e219e2e"},
-  {"url":"math4/es5/input/tex/extensions/textcomp.js","revision":"779304208de3326afe079803dd63474b"},
-  {"url":"math4/es5/input/tex/extensions/bussproofs.js","revision":"2a012160a34e1978ee2729f7bc6bfb54"},
-  {"url":"math4/es5/input/tex/extensions/bboldx.js","revision":"d7d84f77723ba8e319a06b56a7be6e56"},
-  {"url":"math4/es5/input/tex/extensions/physics.js","revision":"74779271dfe8469bbff50a7933ed894d"},
-  {"url":"math4/es5/input/tex/extensions/centernot.js","revision":"981ae6f38a71e0ba263a81b30e2938bc"},
-  {"url":"math4/es5/input/tex/extensions/gensymb.js","revision":"d2617a88f182bf137625c409cfb3a0a9"},
-  {"url":"math4/es5/input/tex/extensions/upgreek.js","revision":"6913a922c142b97e8405f6aab8b6a305"},
-  {"url":"math4/es5/input/tex/extensions/empheq.js","revision":"28f0874172a1c7a2289d6f8296437d2e"},
-  {"url":"math4/es5/input/tex/extensions/mhchem.js","revision":"4579e53fa894be9649c01b767e3a8b36"},
-  {"url":"math4/es5/input/asciimath.js","revision":"60375c22b376d0836822aced7c94f0fc"},
-  {"url":"math4/es5/input/tex.js","revision":"6a47d816eb619ea7bcadaab6c0b79035"},
-  {"url":"math4/es5/startup.js","revision":"7cc144ac8a13bc4d9176e830bd1f93de"},
-  {"url":"math4/es5/output/svg.js","revision":"6039da389b82c41a2d6ea6e5f819053f"},
-  {"url":"math4/es5/fonts/mathjax-bbm-font-extension/svg.js","revision":"55bd748eb7fb683e0dcb7992ae8a9a78"},
-  {"url":"math4/es5/fonts/mathjax-tex-font/svg.js","revision":"dc6949cf018c9e909c5a77e38a72e454"},
-  {"url":"math4/es5/fonts/mathjax-bboldx-font-extension/svg.js","revision":"9a4ce996090d4b84adaec560859c67be"},
-  {"url":"math4/es5/fonts/mathjax-dsfont-font-extension/svg.js","revision":"dec2c6790c441e2a6843f6c11f5b47db"},
-  {"url":"math4/es5/fonts/mathjax-mhchem-font-extension/svg.js","revision":"3e8dd442c15bc792d3718e93cf2e6e4a"},
-  {"url":"resources/dia.txt","revision":"edfd3030f3e736b045c7bfa0772d3a73"},
+  {"url":"math4/es5/drawio-mathjax.min.js","revision":"a6ac5a84944a345c72b79df99146d038"},
+  {"url":"resources/dia.txt","revision":"30fc6372a66c01eee256a0b889acbe78"},
   {"url":"favicon.ico","revision":"b2bf17349e4b50ce4ba311f079f8bf7d"},
   {"url":"images/manifest.json","revision":"840dccdf2df72f46a63fb3b32ab6100e"},
   {"url":"images/logo.png","revision":"e4e0d092abdb1e668b5ec41a7fe0713c"},
@@ -147,64 +108,64 @@ var MANIFEST = [
 // are derived exactly like MANIFEST entries, so entries that move between
 // the two lists keep their cached bytes.
 var LAZY_MANIFEST = [
-  {"url":"resources/dia_am.txt","revision":"b59f89d336890fd4337edc71b233eb6c"},
-  {"url":"resources/dia_ar.txt","revision":"e94e957911cb821882524f5afcdbfb79"},
-  {"url":"resources/dia_bg.txt","revision":"07c9bbe0cf41097c2473f543b69b3db4"},
-  {"url":"resources/dia_bn.txt","revision":"3634880c08ae6eba2a5be21e3d34e26e"},
-  {"url":"resources/dia_bs.txt","revision":"646bff38229df72cbc5f5c03e418ea1e"},
-  {"url":"resources/dia_ca.txt","revision":"4ab31b499b2695d52ed7f8ea14d6e721"},
-  {"url":"resources/dia_cs.txt","revision":"ebd2aa34c7a6e5ba67407edf0cb9ecc4"},
-  {"url":"resources/dia_da.txt","revision":"7b69e1d060bfda93d9aa1ab6b4a4a6d1"},
-  {"url":"resources/dia_de.txt","revision":"4d889315477d2a427470337afe7a88e4"},
-  {"url":"resources/dia_el.txt","revision":"4a5e54efd799619c0614fdff1357ce9b"},
-  {"url":"resources/dia_eo.txt","revision":"5855a68b217984f28c42470a221ba2a4"},
-  {"url":"resources/dia_es.txt","revision":"a33ce8d74b03d49969a00669f349de27"},
-  {"url":"resources/dia_et.txt","revision":"cd6679231ac57d1bb55fdee2542d337d"},
-  {"url":"resources/dia_eu.txt","revision":"2854670323df7449b45b7d6978b9f7cc"},
-  {"url":"resources/dia_fa.txt","revision":"424a88da69b4ae6eb4daf1bd374870d0"},
-  {"url":"resources/dia_fi.txt","revision":"7acaa1c7a415475554bb482163791d51"},
-  {"url":"resources/dia_fil.txt","revision":"b2d59dcc2b977d738296a092892e3715"},
-  {"url":"resources/dia_fr.txt","revision":"8e43e6b263579a56a7d4b13866afe030"},
-  {"url":"resources/dia_gl.txt","revision":"6c04b9a07d0552ce24c35060a3476bd3"},
-  {"url":"resources/dia_gu.txt","revision":"8f0db30c546b0deca24482136af9c15c"},
-  {"url":"resources/dia_he.txt","revision":"32781b0fb308ccfb0cd0ef9b9a862532"},
-  {"url":"resources/dia_hi.txt","revision":"c05c7983446c5109e4340d1133e402b7"},
-  {"url":"resources/dia_hr.txt","revision":"48449082e59a0014615bd7a3611f98b5"},
-  {"url":"resources/dia_hu.txt","revision":"c0e9dcdfabbcd3a6565ad460e8c0392a"},
-  {"url":"resources/dia_i18n.txt","revision":"a581c50d72009ba991cdf3adb82e363f"},
-  {"url":"resources/dia_id.txt","revision":"5887dc7103b070f3c9ee9b30a20d3899"},
-  {"url":"resources/dia_it.txt","revision":"b4fd503e32a4115c75cc92787bd6a97a"},
-  {"url":"resources/dia_ja.txt","revision":"75013e803718f5aa0a6fbe028f7dc04b"},
-  {"url":"resources/dia_kl.txt","revision":"2632944c3ec9f178f3ddb18945db87c8"},
-  {"url":"resources/dia_kn.txt","revision":"cc98dfcf87eaf2adb6d4eb424db3a9e1"},
-  {"url":"resources/dia_ko.txt","revision":"4d277ae0ca9ef17047de1ebf17d08cbe"},
-  {"url":"resources/dia_lt.txt","revision":"614fcbc2cd499d6f23aceb3da3db8bee"},
-  {"url":"resources/dia_lv.txt","revision":"5f4ba148c3be3959b2b6222c347b664c"},
-  {"url":"resources/dia_ml.txt","revision":"dc02225dea3cb654e35b9bbc7ccfc45d"},
-  {"url":"resources/dia_mr.txt","revision":"8e1e32fc31030749248f93b101ddd250"},
-  {"url":"resources/dia_ms.txt","revision":"21871f35d5f81538de9a4c94b154f2fe"},
-  {"url":"resources/dia_my.txt","revision":"5193327e989d4bcb61c6bacf81bc4571"},
-  {"url":"resources/dia_nl.txt","revision":"d4cb467d5b6eb91dedce7f936c250b08"},
-  {"url":"resources/dia_no.txt","revision":"90e94f8588cf087b6e4c5406b203c18a"},
-  {"url":"resources/dia_pl.txt","revision":"e3a72003c66ee95282d068643304dba7"},
-  {"url":"resources/dia_pt.txt","revision":"8f54dc3269070c3cae8059258da67682"},
-  {"url":"resources/dia_pt-br.txt","revision":"ebee308158944fb20b26dc2498ca8a9b"},
-  {"url":"resources/dia_ro.txt","revision":"bdc712254f8ac33757f01d65d35f4c02"},
-  {"url":"resources/dia_ru.txt","revision":"aa03340b0bf0368f14826d58a6542787"},
-  {"url":"resources/dia_si.txt","revision":"3101fea2fff6cacbc17b13890fe66ed9"},
-  {"url":"resources/dia_sk.txt","revision":"aabbe740e8363606bd6a9e067fb2a673"},
-  {"url":"resources/dia_sl.txt","revision":"27b6b9705014d16fde648382e7ccf6bf"},
-  {"url":"resources/dia_sr.txt","revision":"12260aeb93988aac7cb8b83993fc2ff7"},
-  {"url":"resources/dia_sv.txt","revision":"d6b3b445eb392e41d793e022e7a81a14"},
-  {"url":"resources/dia_sw.txt","revision":"9e54685889c2be55dd9bc4c61ba154c1"},
-  {"url":"resources/dia_ta.txt","revision":"a2ffcc9975b2fc272e8213383807cc3f"},
-  {"url":"resources/dia_te.txt","revision":"a12b59be5e7c90557e37e9ec83bcba68"},
-  {"url":"resources/dia_th.txt","revision":"512b8823bd240ca2353076e5d29d4bee"},
-  {"url":"resources/dia_tr.txt","revision":"fe4eed2d05ef628770e39c64faf07698"},
-  {"url":"resources/dia_uk.txt","revision":"55cfab268b6987564a32f508508523a5"},
-  {"url":"resources/dia_vi.txt","revision":"5743a41dfbff31cab733d3fbdd09a601"},
-  {"url":"resources/dia_zh.txt","revision":"16613163e9724dab1a6efef40841e7b3"},
-  {"url":"resources/dia_zh-tw.txt","revision":"2ba89fd9c65ed28c75ad3cddc71d8570"}
+  {"url":"resources/dia_am.txt","revision":"4001130f8fcba0bb5e60aa51189c3716"},
+  {"url":"resources/dia_ar.txt","revision":"1985656dbaf42f4bcd9511f86f1aaefe"},
+  {"url":"resources/dia_bg.txt","revision":"7a2a97a8a2f98e6b35b4059ada5c4b0b"},
+  {"url":"resources/dia_bn.txt","revision":"587379414748f8564dbf24f3627fbf28"},
+  {"url":"resources/dia_bs.txt","revision":"d5c906c12a047f436afa6d9d08c3823d"},
+  {"url":"resources/dia_ca.txt","revision":"baa8fa491593cf555a94c321970bd21c"},
+  {"url":"resources/dia_cs.txt","revision":"89032b9e1ee82882b281eef7820ca982"},
+  {"url":"resources/dia_da.txt","revision":"6040f3a74dfdf9cf01ba24ba109036bd"},
+  {"url":"resources/dia_de.txt","revision":"5adeef094ddfae73c35a54d63b392a17"},
+  {"url":"resources/dia_el.txt","revision":"51bc88cbee6abb67a362eb381af76f9d"},
+  {"url":"resources/dia_eo.txt","revision":"bdb9a9d841d9d043fdd04059b9ea86dd"},
+  {"url":"resources/dia_es.txt","revision":"5fe779963df815cd6bcbfaf03567b8d3"},
+  {"url":"resources/dia_et.txt","revision":"e16f7b1af3fbd0132a7946e07c520ac6"},
+  {"url":"resources/dia_eu.txt","revision":"68f056540d13c520db9d76c6838e0328"},
+  {"url":"resources/dia_fa.txt","revision":"1f7cf8b520d2382078a7b5c5922a0448"},
+  {"url":"resources/dia_fi.txt","revision":"ff22229f683e0c4b7369df89a554cf85"},
+  {"url":"resources/dia_fil.txt","revision":"92757eeb6054242356f49b6bfce2e922"},
+  {"url":"resources/dia_fr.txt","revision":"4936bae38abcfa496ef5ef421b521082"},
+  {"url":"resources/dia_gl.txt","revision":"e7ed5a57c91afac72abb7453244c27ad"},
+  {"url":"resources/dia_gu.txt","revision":"e12a200361e530e3562ff0ce89d1cd19"},
+  {"url":"resources/dia_he.txt","revision":"4f5ee35fcfc4761d299805fb5f9de66b"},
+  {"url":"resources/dia_hi.txt","revision":"393c7f59a447b102e048f0bb323f4d0b"},
+  {"url":"resources/dia_hr.txt","revision":"c87a2e3b3f4924e7c3e2aa7acc0b5c2d"},
+  {"url":"resources/dia_hu.txt","revision":"45da11467ab88c5dd8cdc8f459ee7f85"},
+  {"url":"resources/dia_i18n.txt","revision":"7e3db810d6fdf49510b7127b883797a4"},
+  {"url":"resources/dia_id.txt","revision":"a6224f3be7848ee46899bb60032d530c"},
+  {"url":"resources/dia_it.txt","revision":"35ac271a5401119c13cf724ed99047c8"},
+  {"url":"resources/dia_ja.txt","revision":"5f190cf64c4d0649552f0fb134d27a7f"},
+  {"url":"resources/dia_kl.txt","revision":"ffe89cc67479aa373b7a8040e2f61d4a"},
+  {"url":"resources/dia_kn.txt","revision":"eddfe4b7a286fe3d9ecf8989366a7751"},
+  {"url":"resources/dia_ko.txt","revision":"de2a3214d768365a67b204326e7c470e"},
+  {"url":"resources/dia_lt.txt","revision":"162b5b8c92f8b770e745df2012c16ae1"},
+  {"url":"resources/dia_lv.txt","revision":"0eeb9fe17a837463973d174ae7fff006"},
+  {"url":"resources/dia_ml.txt","revision":"e4a6b4af3b0e6143aee337494dee2499"},
+  {"url":"resources/dia_mr.txt","revision":"60b17c26d2133a725471c5e143ebd18c"},
+  {"url":"resources/dia_ms.txt","revision":"28053c5e152705e6a62840061d707458"},
+  {"url":"resources/dia_my.txt","revision":"6dfb7a0176b44b955da2582f35c67fd0"},
+  {"url":"resources/dia_nl.txt","revision":"9538862e93d73d6313110c8d96fde212"},
+  {"url":"resources/dia_no.txt","revision":"e5721475ff740a75f83629836d720746"},
+  {"url":"resources/dia_pl.txt","revision":"93560d4c9c492056f80948cad5bfce0a"},
+  {"url":"resources/dia_pt.txt","revision":"813caf8dd5f39751e1bcf72375a116ce"},
+  {"url":"resources/dia_pt-br.txt","revision":"200e143781e7c67c10843902f7bd4ccd"},
+  {"url":"resources/dia_ro.txt","revision":"467ad77403a39f3060c88e059ddbe0a0"},
+  {"url":"resources/dia_ru.txt","revision":"345938cbeed0de24e8569a892ec49737"},
+  {"url":"resources/dia_si.txt","revision":"ce16c8d262c3e35c10383d262e9ef27e"},
+  {"url":"resources/dia_sk.txt","revision":"a2cbc5cdfd842d16ad09da4c35bf22ef"},
+  {"url":"resources/dia_sl.txt","revision":"b5f0c1f66ecb3cff9b7c99d40badf9d0"},
+  {"url":"resources/dia_sr.txt","revision":"c0560a1f69674f2fe22df115f326edd6"},
+  {"url":"resources/dia_sv.txt","revision":"0ede588b2d4abb5ccbda5be829b7e140"},
+  {"url":"resources/dia_sw.txt","revision":"aaa978bdd9ba591bb18fe22b547fd286"},
+  {"url":"resources/dia_ta.txt","revision":"56af28bc5b8ac9c5ab630fb85c18ad23"},
+  {"url":"resources/dia_te.txt","revision":"403542fb637e23fa3da68454a8943c96"},
+  {"url":"resources/dia_th.txt","revision":"704b407aabca188c26578ef61cae8271"},
+  {"url":"resources/dia_tr.txt","revision":"0192717d519b28ec3a9c8dbf4990b8ec"},
+  {"url":"resources/dia_uk.txt","revision":"b48e96b877eba1f10f2bb4a277792a03"},
+  {"url":"resources/dia_vi.txt","revision":"5494a510be9216964b91a7143c6b4459"},
+  {"url":"resources/dia_zh.txt","revision":"ca4f53f2b7573310984dd1490fef2a7d"},
+  {"url":"resources/dia_zh-tw.txt","revision":"c16df53d33fb021ee5eb2c5ce25f50f4"}
 ];
 
 // Precached URL served when a lazy entry is requested offline before it was
@@ -264,6 +225,7 @@ var DEV_MANIFEST = [
   "js/diagramly/GitLabFile.js",
   "js/diagramly/GitLabLibrary.js",
   "js/diagramly/GraphViewer.js",
+  "js/diagramly/HomeDialog.js",
   "js/diagramly/Init.js",
   "js/diagramly/LibavoidRouting.js",
   "js/diagramly/LocalFile.js",
@@ -365,7 +327,9 @@ var DEV_MANIFEST = [
   "js/diagramly/vsdx/mxVsdxCanvas2D.js",
   "js/diagramly/emf/emf-svg.js",
   "js/diagramly/gif/AnimatedExport.js",
+  "js/diagramly/gif/AnimationExport.js",
   "js/diagramly/gif/GifEncoder.js",
+  "js/diagramly/gif/Mp4Encoder.js",
   "js/diagramly/graphml/mxGraphMlCodec.js",
   "js/diagramly/miro/MiroImporter.js",
   "js/cryptojs/aes.min.js",
@@ -905,12 +869,26 @@ self.addEventListener('fetch', function(event)
 
 // Warms cache entries for a page. warmLazy caches one lazy entry - the
 // current UI language right after the first install, whose own request was
-// not yet routed through this worker. warmDev fills all missing dev
-// entries so one online dev load yields a complete offline source set.
-// Only URLs in the respective manifests are ever fetched and cached.
+// not yet routed through this worker, or a language installed in the
+// offline languages dialog, which may run in a page this worker does not
+// control. A port transferred with warmLazy is notified when the entry is
+// done (cached or failed). warmDev fills all missing dev entries so one
+// online dev load yields a complete offline source set. Only URLs in the
+// respective manifests are ever fetched and cached.
 self.addEventListener('message', function(event)
 {
   var data = event.data;
+  var port = (event.ports != null && event.ports.length > 0) ?
+    event.ports[0] : null;
+
+  // The sender re-reads the cache for the outcome
+  function reply()
+  {
+    if (port != null)
+    {
+      port.postMessage(true);
+    }
+  }
 
   if (data != null && data.warmDev == true)
   {
@@ -930,7 +908,7 @@ self.addEventListener('message', function(event)
     }
     catch (e)
     {
-      return;
+      // ignore
     }
 
     if (key != null)
@@ -942,7 +920,11 @@ self.addEventListener('message', function(event)
           return (cached != null) ? null :
             fetchLazy(cache, key).then(null, function() { return null; });
         });
-      }));
+      }).then(reply, reply));
+    }
+    else
+    {
+      reply();
     }
   }
 });

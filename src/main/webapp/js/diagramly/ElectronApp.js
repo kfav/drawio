@@ -193,19 +193,30 @@ mxStencilRegistry.allowEval = false;
 	};
 	
 	var oldWindowOpen = window.open;
-	window.open = async function(url)
+	window.open = function(url, target, features)
 	{
 		// Only open a native electron window when url is empty. We use this in our code in several places.
-		if (url == null)
+		// Not async so that the caller gets the Window and not a Promise (eg. mxUtils.show writes to
+		// its document, which threw for the Preview action)
+		if (url == null || url === '' || url === 'about:blank')
 		{
-			return oldWindowOpen(url);
+			// Keyword targets (_self, _top, _parent) would replace the editor page
+			// with about:blank, which will-navigate in the main process does not stop
+			if (target == null || String(target).charAt(0) == '_')
+			{
+				target = '_blank';
+			}
+
+			// Native window.open turns null into the relative URL "null"
+			return oldWindowOpen((url != null) ? url : '', target, features);
 		}
 		else
 		{
-			// Open external will filter urls based on their protocol
-			await requestSync({action: 'openExternal', url: url});
+			// Open external will filter urls based on their protocol. Returns a
+			// Promise (non-null) as before so that callers do not use fallbacks.
+			return requestSync({action: 'openExternal', url: url}).then(function() {});
 		}
-	}
+	};
 
 	var origAppMain = App.main;
 	
@@ -1057,15 +1068,55 @@ mxStencilRegistry.allowEval = false;
 		var newPath = (file != null && file.fileObject != null &&
 			file == this.getCurrentFile()) ? file.fileObject.path : null;
 		
+		// Path of the latest request so that registrations that resolve
+		// after a newer request can be detected and undone
+		this.requestedWatchPath = newPath;
+
 		if (this.watchedPath != newPath)
 		{
-			this.unwatchPath(this.watchedPath);
+			var oldPath = this.watchedPath;
+			this.watchedPath = null;
+
+			try
+			{
+				await this.unwatchPath(oldPath);
+			}
+			catch (e)
+			{
+				EditorUi.debug('EditorUi.watchFile', [this],
+					'unwatch failed', [oldPath], 'error', [e]);
+			}
 		}
 
 		if (newPath != null)
 		{
-			this.watchedPath = newPath;
-			this.watchPath(newPath);
+			// Only records the path as watched once the registration
+			// succeeded so that a failed watch is retried on the next
+			// call [jgraph/drawio-dev#676]
+			try
+			{
+				await this.watchPath(newPath);
+
+				if (this.requestedWatchPath == newPath)
+				{
+					this.watchedPath = newPath;
+				}
+				else if (this.watchedPath != newPath)
+				{
+					// Superseded by a newer request while pending
+					await this.unwatchPath(newPath);
+				}
+			}
+			catch (e)
+			{
+				if (this.watchedPath == newPath)
+				{
+					this.watchedPath = null;
+				}
+
+				EditorUi.debug('EditorUi.watchFile', [this],
+					'watch failed', [newPath], 'error', [e]);
+			}
 		}
 	};
 	
@@ -1437,14 +1488,6 @@ mxStencilRegistry.allowEval = false;
 					var onMermaid = mxUtils.bind(this, function(diagramXml)
 					{
 						fn(null, diagramXml, null, name, false);
-
-						// Mermaid files carry no stored view, so the default scroll
-						// can land at an arbitrary edge (e.g. the bottom of a tall
-						// flowchart). Apply the standard fit-on-load once the diagram
-						// is in place.
-						var ui = this;
-						window.setTimeout(function() { ui.fitInitialView(); }, 0);
-
 						checkDrafts();
 					});
 
@@ -2347,7 +2390,8 @@ mxStencilRegistry.allowEval = false;
 	};
 
 	/**
-	 * Loads the given file handle as a local file.
+	 * Saves the current file, or saves it with a new name if forceDialog is true
+	 * or the file has no title, and invokes success after saving.
 	 */
 	App.prototype.saveFile = function(forceDialog, success, error, cancel)
 	{
@@ -2415,7 +2459,9 @@ mxStencilRegistry.allowEval = false;
 	};
 	
 	/**
-	 * Translates this point by the given vector.
+	 * Saves the given images as a library with the given name to the given file,
+	 * or to a new local library if file is null. The library is renamed if the
+	 * name has changed. Invokes fn after saving or on error.
 	 */
 	App.prototype.saveLibrary = function(name, images, file, mode, noSpin, noReload, fn)
 	{
@@ -2831,6 +2877,16 @@ mxStencilRegistry.allowEval = false;
 				case 'txt':
 					filters = [
 				          { name: 'Plain Text', extensions: ['txt'] }
+				       ];
+				break;
+				case 'gif':
+					filters = [
+				          { name: 'GIF Images', extensions: ['gif'] }
+				       ];
+				break;
+				case 'mp4':
+					filters = [
+				          { name: 'MP4 Videos', extensions: ['mp4'] }
 				       ];
 				break;
 			};
